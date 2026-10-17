@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Hub</title>
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1220;
+        --panel: #111c2e;
+        --panel-soft: #16243a;
+        --border: #263750;
+        --text: #edf3ff;
+        --muted: #91a3bc;
+        --blue: #79aef7;
+        --green: #51d6a1;
+        --red: #ff8585;
+        --gold: #f3c875;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .app {
+        max-width: 1440px;
+        margin: auto;
+        padding: 28px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .brand-icon {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border: 1px solid #38567b;
+        border-radius: 14px;
+        background: #172a45;
+        color: var(--blue);
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 25px;
+        letter-spacing: -0.6px;
+      }
+
+      .subtitle {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .primary-button {
+        padding: 12px 17px;
+        border: 1px solid #6d9cdb;
+        border-radius: 10px;
+        background: #315f98;
+        color: white;
+        font-weight: 650;
+      }
+
+      .primary-button:hover {
+        background: #3d70ad;
+      }
+
+      .section-heading {
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .platform-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .panel,
+      .metric-card {
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        background: var(--panel);
+      }
+
+      .platform-card {
+        padding: 20px;
+      }
+
+      .platform-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .platform-name {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .platform-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        background: var(--panel-soft);
+        font-size: 18px;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 9px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .status::before {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #75849a;
+        content: "";
+      }
+
+      .status.connected {
+        border-color: #245b49;
+        color: var(--green);
+      }
+
+      .status.connected::before {
+        background: var(--green);
+      }
+
+      .status.error {
+        border-color: #683b43;
+        color: var(--red);
+      }
+
+      .status.error::before {
+        background: var(--red);
+      }
+
+      .platform-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin: 16px 0 0;
+      }
+
+      .platform-metrics .metric-value {
+        font-size: 22px;
+      }
+
+      .platform-detail {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+
+      .metric-card {
+        padding: 19px;
+        min-width: 0;
+      }
+
+      .metric-label {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .metric-value {
+        display: block;
+        margin-top: 12px;
+        font-size: 29px;
+        font-weight: 750;
+        overflow-wrap: anywhere;
+      }
+
+      .bottom-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(250px, 1fr);
+        gap: 16px;
+      }
+
+      .panel {
+        padding: 20px;
+        min-width: 0;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 17px;
+      }
+
+      .panel-title {
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .event-count {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 260px;
+        overflow-y: auto;
+      }
+
+      .activity-item {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #0e1929;
+      }
+
+      .activity-dot {
+        width: 8px;
+        height: 8px;
+        margin-top: 5px;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--blue);
+      }
+
+      .activity-text {
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+
+      .activity-time {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .empty-state {
+        padding: 24px 10px;
+        color: var(--muted);
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .backend-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+      }
+
+      .backend-row:last-child {
+        border-bottom: 0;
+      }
+
+      .backend-value {
+        color: var(--muted);
+        text-align: right;
+      }
+
+      .footer {
+        margin-top: 26px;
+        color: #62748c;
+        font-size: 11px;
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .metrics-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .bottom-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .app {
+          padding: 18px;
+        }
+
+        .platform-grid {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-icon">H</div>
+          <div>
+            <h1>Live Hub</h1>
+            <p class="subtitle">Streaming control center</p>
+          </div>
+        </div>
+
+        <button id="openChatButton" class="primary-button">
+          Buka Live Chat ↗
+        </button>
+      </header>
+
+      <section>
+        <h2 class="section-heading">Platform</h2>
+
+        <div class="platform-grid">
+          <article class="panel platform-card">
+            <div class="platform-top">
+              <div class="platform-name">
+                <div class="platform-icon">♪</div>
+                TikTok Live
+              </div>
+              <span id="tiktokStatus" class="status">Menunggu</span>
+            </div>
+            <p id="tiktokDetail" class="platform-detail">
+              Menunggu event koneksi dari backend.
+            </p>
+          </article>
+
+          <article class="panel platform-card">
+            <div class="platform-top">
+              <div class="platform-name">
+                <div class="platform-icon">▶</div>
+                YouTube Live
+              </div>
+              <span id="youtubeStatus" class="status">Menunggu</span>
+            </div>
+            <p id="youtubeDetail" class="platform-detail">
+              Menunggu event koneksi dari backend.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-heading">Statistik Live</h2>
+
+        <div class="platform-grid">
+          <article class="panel platform-card">
+            <h2 class="panel-title">TikTok Live</h2>
+
+            <div class="metrics-grid platform-metrics">
+              <div>
+                <span class="metric-label">Views</span>
+                <strong id="tiktokViews" class="metric-value">—</strong>
+              </div>
+              <div>
+                <span class="metric-label">Total Views </span>
+                <strong id="tiktokViewers" class="metric-value">—</strong>
+              </div>
+              <div>
+                <span class="metric-label">Likes</span>
+                <strong id="tiktokLikes" class="metric-value">—</strong>
+              </div>
+              <div>
+                <span class="metric-label">Gift</span>
+                <strong id="tiktokGifts" class="metric-value">0</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel platform-card">
+            <h2 class="panel-title">YouTube Live</h2>
+
+            <div class="metrics-grid platform-metrics">
+              <div>
+                <span class="metric-label">Views</span>
+                <strong id="youtubeViewers" class="metric-value">—</strong>
+              </div>
+              <div>
+                <span class="metric-label">Total Views</span>
+                <strong id="youtubeViews" class="metric-value">—</strong>
+              </div>
+              <div>
+                <span class="metric-label">Likes</span>
+                <strong id="youtubeLikes" class="metric-value">—</strong>
+              </div>
+              <div>
+                <span class="metric-label">Gift</span>
+                <strong id="youtubeGifts" class="metric-value">0</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Aktivitas Terbaru</h2>
+            <span id="eventCount" class="event-count">0 event</span>
+          </div>
+
+          <div id="activityList" class="activity-list">
+            <div class="empty-state">
+              Belum ada aktivitas.<br />
+              Event akan muncul setelah diterima dari backend.
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Status Sistem</h2>
+          </div>
+
+          <div class="backend-row">
+            <span>Antarmuka</span>
+            <span class="backend-value">Aktif</span>
+          </div>
+
+          <div class="backend-row">
+            <span>Event diterima</span>
+            <strong id="receivedMetric">0</strong>
+          </div>
+
+          <div class="backend-row">
+            <span>Pesan chat</span>
+            <strong id="chatMetric">0</strong>
+          </div>
+
+          <div class="backend-row">
+            <span>Terakhir menerima event</span>
+            <span id="lastEventTime" class="backend-value">—</span>
+          </div>
+        </article>
+      </section>
+
+      <footer class="footer">
+        Live Hub · Statistik ditampilkan hanya jika datanya tersedia.
+      </footer>
+    </main>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+
+      const numberFormat = new Intl.NumberFormat("id-ID");
+
+      const state = {
+        received: 0,
+        chats: 0,
+      };
+
+      const platformState = {
+        tiktok: {
+          status: "Menunggu",
+          detail: "Menunggu event koneksi dari backend.",
+        },
+        youtube: {
+          status: "Menunggu",
+          detail: "Menunggu event koneksi dari backend.",
+        },
+      };
+
+      function formatNumber(value) {
+        const number = Number(value);
+        return Number.isFinite(number) ? numberFormat.format(number) : "—";
+      }
+
+      function setMetric(id, value) {
+        $(id).textContent =
+          value === null || value === undefined ? "—" : formatNumber(value);
+      }
+
+      function getStatus(data) {
+        const raw = data?.status ?? data?.state ?? data?.message;
+
+        if (data?.connected === true || data?.isConnected === true) {
+          return "Terhubung";
+        }
+
+        if (data?.connected === false || data?.isConnected === false) {
+          return "Terputus";
+        }
+
+        if (typeof raw === "string") {
+          const value = raw.toLowerCase();
+
+          if (
+            value.includes("connect") ||
+            value.includes("connected") ||
+            value.includes("terhubung")
+          ) {
+            return "Terhubung";
+          }
+
+          if (
+            value.includes("error") ||
+            value.includes("fail") ||
+            value.includes("disconnect") ||
+            value.includes("offline") ||
+            value.includes("terputus")
+          ) {
+            return "Terputus";
+          }
+
+          return raw;
+        }
+
+        return "Status berubah";
+      }
+
+      function renderStats(snapshot) {
+        if (!snapshot || typeof snapshot !== "object") return;
+
+        console.log("[STATS DEBUG] TikTok:", {
+          likes: snapshot.platforms?.tiktok?.likes,
+          views: snapshot.platforms?.tiktok?.views,
+          viewers: snapshot.platforms?.tiktok?.viewers,
+          totalLikes: snapshot.totals?.likes,
+        });
+        const platforms = snapshot.platforms ?? {};
+
+        $("receivedMetric").textContent = formatNumber(
+          snapshot.eventsReceived ?? 0,
+        );
+
+        $("eventCount").textContent =
+          `${formatNumber(snapshot.eventsReceived ?? 0)} event diterima`;
+
+        for (const platform of ["tiktok", "youtube"]) {
+          const stats = platforms[platform];
+          if (!stats) continue;
+
+          setMetric(`${platform}Viewers`, stats.viewers);
+          setMetric(`${platform}Views`, stats.views);
+          setMetric(`${platform}Likes`, stats.likes);
+          setMetric(`${platform}Gifts`, stats.giftEvents);
+
+          if (typeof stats.connected === "boolean") {
+            platformState[platform].status = stats.connected
+              ? "Terhubung"
+              : "Terputus";
+
+            platformState[platform].detail = stats.connected
+              ? "Backend melaporkan koneksi aktif."
+              : "Backend melaporkan koneksi tidak aktif.";
+
+            renderPlatform(platform);
+          }
+        }
+      }
+
+      function renderPlatform(platform) {
+        const item = platformState[platform];
+        if (!item) return;
+
+        const statusElement = $(`${platform}Status`);
+        const detailElement = $(`${platform}Detail`);
+
+        statusElement.textContent = item.status;
+        statusElement.className = "status";
+
+        if (item.status === "Terhubung") {
+          statusElement.classList.add("connected");
+        } else if (item.status === "Terputus") {
+          statusElement.classList.add("error");
+        }
+
+        detailElement.textContent = item.detail;
+      }
+
+      function addActivity(event) {
+        const list = $("activityList");
+
+        if (list.querySelector(".empty-state")) {
+          list.replaceChildren();
+        }
+
+        const item = document.createElement("div");
+        item.className = "activity-item";
+
+        const dot = document.createElement("span");
+        dot.className = "activity-dot";
+
+        const content = document.createElement("div");
+        content.className = "activity-text";
+
+        const platform = String(event.platform ?? "system").toUpperCase();
+        const type = String(event.type ?? "EVENT");
+        const data = event.data ?? {};
+
+        let description = `${platform} · ${type}`;
+
+        if (type === "CHAT") {
+          const user = data.user?.name ?? data.username ?? "Pengguna";
+          description = `${platform} · ${user}: ${data.message ?? ""}`;
+        } else if (type === "STREAM_STATUS") {
+          description = `${platform} · Status: ${getStatus(data)}`;
+        } else if (type === "GIFT") {
+          const user = data.user?.name ?? data.username ?? "Pengguna";
+          const gift = data.giftName ?? data.gift ?? "Gift";
+          description = `${platform} · ${user} mengirim ${gift}`;
+        } else if (type === "VIEWER_UPDATE") {
+          description = `${platform} · Pembaruan jumlah penonton`;
+        } else if (type === "LIKE") {
+          description = `${platform} · Pembaruan likes`;
+        }
+
+        const text = document.createElement("div");
+        text.textContent = description;
+
+        const time = document.createElement("time");
+        time.className = "activity-time";
+        time.textContent = new Date().toLocaleTimeString("id-ID");
+
+        content.append(text, time);
+        item.append(dot, content);
+        list.appendChild(item);
+
+        while (list.children.length > 30) {
+          list.firstElementChild?.remove();
+        }
+      }
+
+      function handleEvent(event) {
+        if (!event || typeof event !== "object") return;
+
+        state.received += 1;
+
+        $("receivedMetric").textContent = formatNumber(state.received);
+        $("eventCount").textContent = `${state.received} event diterima`;
+        $("lastEventTime").textContent = new Date().toLocaleTimeString("id-ID");
+
+        const platform = String(event.platform ?? "").toLowerCase();
+        const data = event.data ?? {};
+        const type = String(event.type ?? "");
+
+        if (type === "STREAM_STATUS" && platformState[platform]) {
+          platformState[platform].status = getStatus(data);
+
+          platformState[platform].detail =
+            typeof data.message === "string"
+              ? data.message
+              : `Event status terakhir diterima pukul ${new Date().toLocaleTimeString("id-ID")}`;
+
+          renderPlatform(platform);
+        }
+
+        if (type === "CHAT") {
+          state.chats += 1;
+          $("chatMetric").textContent = formatNumber(state.chats);
+        }
+
+        addActivity(event);
+      }
+
+      $("openChatButton").addEventListener("click", async () => {
+        try {
+          await window.liveHub.openChat();
+        } catch (error) {
+          console.error("Gagal membuka Live Chat:", error);
+        }
+      });
+
+      if (window.liveHub?.onEvent) {
+        window.liveHub.onEvent(handleEvent);
+      } else {
+        console.error("API Live Hub tidak ditemukan. Periksa preload.cjs.");
+      }
+
+      if (window.liveHub?.onStats) {
+        window.liveHub.onStats(renderStats);
+      } else {
+        console.warn("API statistik tidak ditemukan.");
+      }
+    </script>
+  </body>
+</html>

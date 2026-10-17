@@ -1,0 +1,26 @@
+{
+  "name": "live-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "desktop": "electron desktop/main.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.7",
+    "tiktok-live-connector": "^2.5.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/ws": "^8.18.2",
+    "electron": "^44.7.0"
+  }
+}
